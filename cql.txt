@@ -1,0 +1,394 @@
+CREATE KEYSPACE gunjan WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 1};
+
+use gunjan;
+
+CREATE TABLE emp(
+   name text PRIMARY KEY,
+   age int,
+   role text
+);
+
+INSERT INTO emp (name, age, role) VALUES('Jhon',37, 'dev');
+INSERT INTO emp (name, age, role) VALUES('Eric',38, 'ceo');
+
+select * from emp;
+
+C:\Program Files\DataStax-DDC\apache-cassandra\bin> nodetool flush datamodeltest emp
+
+C:\Program Files\DataStax-DDC\apache-cassandra\tools\bin> sstabledump "C:\Program Files\DataStax-DDC\data\data\datamodeltest\emp-f89ff2a1b2a511e8a71681ba145c9d63\mc-1-big-Data.db"
+
+[
+  {
+    "partition" : {
+      "key" : [ "Jhon" ],
+      "position" : 0
+    },
+    "rows" : [
+      {
+        "type" : "row",
+        "position" : 18,
+        "liveness_info" : { "tstamp" : "2018-09-07T14:00:13.247Z" },
+        "cells" : [
+          { "name" : "age", "value" : "37" },
+          { "name" : "role", "value" : "dev" }
+        ]
+      }
+    ]
+  },
+  {
+    "partition" : {
+      "key" : [ "Eric" ],
+      "position" : 33
+    },
+    "rows" : [
+      {
+        "type" : "row",
+        "position" : 51,
+        "liveness_info" : { "tstamp" : "2018-09-07T14:00:13.254Z" },
+        "cells" : [
+          { "name" : "age", "value" : "38" },
+          { "name" : "role", "value" : "ceo" }
+        ]
+      }
+    ]
+  }
+]
+
+CREATE TABLE employee(
+   company text,
+   name text,
+   age int,
+   role text,
+   primary key(company,name)
+);
+
+INSERT INTO employee (company, name, age, role) VALUES('OSC','Eric',38, 'ceo');
+INSERT INTO employee (company, name, age, role) VALUES('OSC','Jhon',37, 'dev');
+INSERT INTO employee (company, name, age, role) VALUES('RKG','Anya',29, 'lead');
+INSERT INTO employee (company, name, age, role) VALUES('RKG','Ben',27, 'dev');
+INSERT INTO employee (company, name, age, role) VALUES('RKG','Chad',35, 'ops');
+
+select * from employee;
+
+C:\Program Files\DataStax-DDC\apache-cassandra\bin> nodetool flush datamodeltest employee
+
+C:\Program Files\DataStax-DDC\apache-cassandra\tools\bin> sstabledump "C:\Program Files\DataStax-DDC\data\data\datamodeltest\employee-3c7ec171b2a811e8a71681ba145c9d63\mc-1-big-Data.db"
+
+[
+  {
+    "partition" : {
+      "key" : [ "OSC" ],
+      "position" : 0
+    },
+    "rows" : [
+      {
+        "type" : "row",
+        "position" : 17,
+        "clustering" : [ "Eric" ],
+        "liveness_info" : { "tstamp" : "2018-09-07T14:16:28.502Z" },
+        "cells" : [
+          { "name" : "age", "value" : "38" },
+          { "name" : "role", "value" : "ceo" }
+        ]
+      },
+      {
+        "type" : "row",
+        "position" : 37,
+        "clustering" : [ "Jhon" ],
+        "liveness_info" : { "tstamp" : "2018-09-07T14:16:28.508Z" },
+        "cells" : [
+          { "name" : "age", "value" : "37" },
+          { "name" : "role", "value" : "dev" }
+        ]
+      }
+    ]
+  },
+  {
+    "partition" : {
+      "key" : [ "RKG" ],
+      "position" : 59
+    },
+    "rows" : [
+      {
+        "type" : "row",
+        "position" : 76,
+        "clustering" : [ "Anya" ],
+        "liveness_info" : { "tstamp" : "2018-09-07T14:16:28.511Z" },
+        "cells" : [
+          { "name" : "age", "value" : "29" },
+          { "name" : "role", "value" : "lead" }
+        ]
+      },
+      {
+        "type" : "row",
+        "position" : 98,
+        "clustering" : [ "Ben" ],
+        "liveness_info" : { "tstamp" : "2018-09-07T14:16:28.514Z" },
+        "cells" : [
+          { "name" : "age", "value" : "27" },
+          { "name" : "role", "value" : "dev" }
+        ]
+      },
+      {
+        "type" : "row",
+        "position" : 118,
+        "clustering" : [ "Chad" ],
+        "liveness_info" : { "tstamp" : "2018-09-07T14:16:28.517Z" },
+        "cells" : [
+          { "name" : "age", "value" : "35" },
+          { "name" : "role", "value" : "ops" }
+        ]
+      }
+    ]
+  }
+]
+
+CREATE TABLE test(
+   A text,
+   B text,
+   C text,
+   D text,
+   E text,
+   F text,
+   primary key((A,B),C,D)
+);
+
+INSERT INTO Test (A, B, C, D, E, F) VALUES('a', 'b', 'c', 'd', 'e', 'f');
+INSERT INTO Test (A, B, C, D, E, F) VALUES('a', 'b', 'c', 'g', 'h', 'i');
+INSERT INTO Test (A, B, C, D, E, F) VALUES('a', 'b', 'j', 'k', 'l', 'm');
+INSERT INTO Test (A, B, C, D, E, F) VALUES('a', 'n', 'o', 'p', 'q', 'r');
+INSERT INTO Test (A, B, C, D, E, F) VALUES('s', 't', 'u', 'v', 'w', 'x');
+
+select * from Test;
+
+C:\Program Files\DataStax-DDC\apache-cassandra\bin> nodetool flush datamodeltest test
+
+C:\Program Files\DataStax-DDC\apache-cassandra\tools\bin> sstabledump "C:\Program Files\DataStax-DDC\data\data\datamodeltest\test-b3618510b2a911e8a71681ba145c9d63\mc-1-big-Data.db"
+
+[
+  {
+    "partition" : {
+      "key" : [ "a", "n" ],
+      "position" : 0
+    },
+    "rows" : [
+      {
+        "type" : "row",
+        "position" : 22,
+        "clustering" : [ "o", "p" ],
+        "liveness_info" : { "tstamp" : "2018-09-07T14:27:12.708Z" },
+        "cells" : [
+          { "name" : "e", "value" : "q" },
+          { "name" : "f", "value" : "r" }
+        ]
+      }
+    ]
+  },
+  {
+    "partition" : {
+      "key" : [ "s", "t" ],
+      "position" : 39
+    },
+    "rows" : [
+      {
+        "type" : "row",
+        "position" : 61,
+        "clustering" : [ "u", "v" ],
+        "liveness_info" : { "tstamp" : "2018-09-07T14:27:12.711Z" },
+        "cells" : [
+          { "name" : "e", "value" : "w" },
+          { "name" : "f", "value" : "x" }
+        ]
+      }
+    ]
+  },
+  {
+    "partition" : {
+      "key" : [ "a", "b" ],
+      "position" : 78
+    },
+    "rows" : [
+      {
+        "type" : "row",
+        "position" : 100,
+        "clustering" : [ "c", "d" ],
+        "liveness_info" : { "tstamp" : "2018-09-07T14:27:12.695Z" },
+        "cells" : [
+          { "name" : "e", "value" : "e" },
+          { "name" : "f", "value" : "f" }
+        ]
+      },
+      {
+        "type" : "row",
+        "position" : 115,
+        "clustering" : [ "c", "g" ],
+        "liveness_info" : { "tstamp" : "2018-09-07T14:27:12.702Z" },
+        "cells" : [
+          { "name" : "e", "value" : "h" },
+          { "name" : "f", "value" : "i" }
+        ]
+      },
+      {
+        "type" : "row",
+        "position" : 131,
+        "clustering" : [ "j", "k" ],
+        "liveness_info" : { "tstamp" : "2018-09-07T14:27:12.705Z" },
+        "cells" : [
+          { "name" : "e", "value" : "l" },
+          { "name" : "f", "value" : "m" }
+        ]
+      }
+    ]
+  }
+]
+
+CREATE TABLE mytableset(
+   X text,
+   Y text,
+   myset set<int>,
+   primary key(X,Y)
+);
+
+INSERT INTO mytableset (X, Y, myset) VALUES('a','b', {1,2});
+INSERT INTO mytableset (X, Y, myset) VALUES('a','c', {3,4,5});
+
+select * from mytableset;
+
+C:\Program Files\DataStax-DDC\apache-cassandra\bin> nodetool flush datamodeltest mytableset
+
+C:\Program Files\DataStax-DDC\apache-cassandra\tools\bin> sstabledump "C:\Program Files\DataStax-DDC\data\data\datamodeltest\mytableset-fa334330b2ad11e8a71681ba145c9d63\mc-1-big-Data.db"
+
+[
+  {
+    "partition" : {
+      "key" : [ "a" ],
+      "position" : 0
+    },
+    "rows" : [
+      {
+        "type" : "row",
+        "position" : 15,
+        "clustering" : [ "b" ],
+        "liveness_info" : { "tstamp" : "2018-09-07T14:55:42.181Z" },
+        "cells" : [
+          { "name" : "myset", "deletion_info" : { "marked_deleted" : "2018-09-07T14:55:42.180999Z", "local_delete_time" : "2018-09-07T14:55:42Z" } },
+          { "name" : "myset", "path" : [ "1" ], "value" : "" },
+          { "name" : "myset", "path" : [ "2" ], "value" : "" }
+        ]
+      },
+      {
+        "type" : "row",
+        "position" : 37,
+        "clustering" : [ "c" ],
+        "liveness_info" : { "tstamp" : "2018-09-07T14:55:42.190Z" },
+        "cells" : [
+          { "name" : "myset", "deletion_info" : { "marked_deleted" : "2018-09-07T14:55:42.189999Z", "local_delete_time" : "2018-09-07T14:55:42Z" } },
+          { "name" : "myset", "path" : [ "3" ], "value" : "" },
+          { "name" : "myset", "path" : [ "4" ], "value" : "" },
+          { "name" : "myset", "path" : [ "5" ], "value" : "" }
+        ]
+      }
+    ]
+  }
+]
+
+
+CREATE TABLE mytablelist(
+   X text,
+   Y text,
+   mylist list<int>,
+   primary key(X,Y)
+);
+
+INSERT INTO mytablelist (X, Y, mylist) VALUES('a','b', [1,2]);
+INSERT INTO mytablelist (X, Y, mylist) VALUES('a','c', [3,4,5]);
+
+select * from mytablelist;
+
+C:\Program Files\DataStax-DDC\apache-cassandra\bin> nodetool flush datamodeltest mytablelist
+
+C:\Program Files\DataStax-DDC\apache-cassandra\tools\bin> sstabledump "C:\Program Files\DataStax-DDC\data\data\datamodeltest\mytablelist-c67acb70b2ae11e8a71681ba145c9d63\mc-1-big-Data.db"
+
+[
+  {
+    "partition" : {
+      "key" : [ "a" ],
+      "position" : 0
+    },
+    "rows" : [
+      {
+        "type" : "row",
+        "position" : 15,
+        "clustering" : [ "b" ],
+        "liveness_info" : { "tstamp" : "2018-09-07T15:00:37.081Z" },
+        "cells" : [
+          { "name" : "mylist", "deletion_info" : { "marked_deleted" : "2018-09-07T15:00:37.080999Z", "local_delete_time" : "2018-09-07T15:00:37Z" } },
+          { "name" : "mylist", "path" : [ "c7334600-b2ae-11e8-a716-81ba145c9d63"], "value" : "1" },
+          { "name" : "mylist", "path" : [ "c7334601-b2ae-11e8-a716-81ba145c9d63"], "value" : "2" }
+        ]
+      },
+      {
+        "type" : "row",
+        "position" : 71,
+        "clustering" : [ "c" ],
+        "liveness_info" : { "tstamp" : "2018-09-07T15:00:37.092Z" },
+        "cells" : [
+          { "name" : "mylist", "deletion_info" : { "marked_deleted" : "2018-09-07T15:00:37.091999Z", "local_delete_time" : "2018-09-07T15:00:37Z" } },
+          { "name" : "mylist", "path" : [ "c7345770-b2ae-11e8-a716-81ba145c9d63"], "value" : "3" },
+          { "name" : "mylist", "path" : [ "c7345771-b2ae-11e8-a716-81ba145c9d63"], "value" : "4" },
+          { "name" : "mylist", "path" : [ "c7345772-b2ae-11e8-a716-81ba145c9d63"], "value" : "5" }
+        ]
+      }
+    ]
+  }
+]
+
+CREATE TABLE mytablemap(
+   X text,
+   Y text,
+   mymap map<text,int>,
+   primary key(X,Y)
+);
+
+INSERT INTO mytablemap (X, Y, mymap) VALUES('a','b', {'m':1,'n':2});
+INSERT INTO mytablemap (X, Y, mymap) VALUES('a','c', {'n':3,'p':4,'q':5});
+
+select * from mytablemap;
+
+C:\Program Files\DataStax-DDC\apache-cassandra\bin> nodetool flush datamodeltest mytablemap
+
+C:\Program Files\DataStax-DDC\apache-cassandra\tools\bin> sstabledump "C:\Program Files\DataStax-DDC\data\data\datamodeltest\mytablemap-6096da00b2af11e8a71681ba145c9d63\mc-1-big-Data.db"
+
+[
+  {
+    "partition" : {
+      "key" : [ "a" ],
+      "position" : 0
+    },
+    "rows" : [
+      {
+        "type" : "row",
+        "position" : 15,
+        "clustering" : [ "b" ],
+        "liveness_info" : { "tstamp" : "2018-09-07T15:04:55.635Z" },
+        "cells" : [
+          { "name" : "mymap", "deletion_info" : { "marked_deleted" : "2018-09-07T15:04:55.634999Z", "local_delete_time" : "2018-09-07T15:04:55Z" } },
+          { "name" : "mymap", "path" : [ "m" ], "value" : "1" },
+          { "name" : "mymap", "path" : [ "n" ], "value" : "2" }
+        ]
+      },
+      {
+        "type" : "row",
+        "position" : 41,
+        "clustering" : [ "c" ],
+        "liveness_info" : { "tstamp" : "2018-09-07T15:04:55.644Z" },
+        "cells" : [
+          { "name" : "mymap", "deletion_info" : { "marked_deleted" : "2018-09-07T15:04:55.643999Z", "local_delete_time" : "2018-09-07T15:04:55Z" } },
+          { "name" : "mymap", "path" : [ "n" ], "value" : "3" },
+          { "name" : "mymap", "path" : [ "p" ], "value" : "4" },
+          { "name" : "mymap", "path" : [ "q" ], "value" : "5" }
+        ]
+      }
+    ]
+  }
+]
