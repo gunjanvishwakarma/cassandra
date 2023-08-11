@@ -68,6 +68,29 @@ INSERT INTO employee (company, name, age, role) VALUES('RKG','Anya',29, 'lead');
 INSERT INTO employee (company, name, age, role) VALUES('RKG','Ben',27, 'dev');
 INSERT INTO employee (company, name, age, role) VALUES('RKG','Chad',35, 'ops');
 
+SQL Representation:
+
+A | B | C | D | E | F 
+--+---+---+---+---+--
+a   b   c   d   e   f
+a   b   c   g   h   i
+a   b   j   k   l   m   
+a   n   o   p   q   r   
+s   t   u   v   w   x   
+
+Cassandra Representation:
+
+      c:d:E   c:d:F   c:g:E   c:g:F   j:k:E   j:k:F
+a:b     e       f       h       i       l       m
+
+      o:p:E   o:p:F
+a:n     q       r
+
+      u:v:E   u:v:F
+s:t     w       x
+
+
+
 select * from employee;
 
 C:\Program Files\DataStax-DDC\apache-cassandra\bin> nodetool flush datamodeltest employee
